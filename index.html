@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>React Chat App</title>
+	<script src="./node_modules/react/dist/react.js"></script>
+	<script src="./node_modules/react/dist/JSXTransformer.js"></script>
+	<!-- Firebase -->
+	<script src="https://cdn.firebase.com/js/client/2.1.2/firebase.js"></script>
+	<!-- Reactfire -->
+	<script src="./node_modules/reactfire/dist/reactfire.min.js"></script>
+
+</head>
+<body>
+
+<div id="reactChatApp"></div>
+  <script type="text/jsx">
+
+	var MessageInput = React.createClass({
+	  addMessage: function(e) {
+	    var messageNode = this.refs.message.getDOMNode();
+	    if (e.which === 13) {
+	      this.props.onAddMessage({
+	        name: this.refs.name.getDOMNode().value,
+	        message: messageNode.value
+	      });
+	      messageNode.value = '';
+	    }
+	  },
+	  render: function() {
+	    return (
+	      <div className="message-input">
+	        <label>
+	          Name:<br />
+	          <input ref="name" placeholder="Be creative..." />
+	        </label>
+	        <br />
+	        <label>
+	          Message:<br />
+	          <textarea ref="message" onKeyUp={this.addMessage} placeholder="Type and hit enter..."	></textarea>
+	        </label>
+	      </div>
+	    );
+	  }
+	});
+	
+	var Messages = React.createClass({
+	  render: function() {
+	    var messageFromFireBase = this.props.messages.map(function(item, index) {
+	      return (
+	        <div key={index}><strong>{item.name}</strong>: {item.message}</div>
+	      );
+	    });
+	    return <div className="messages">{messageFromFireBase}</div>;
+	  },
+	  scrollToBottom: function() {
+	    var displayMessage = this.getDOMNode();
+	    displayMessage.scrollTop = displayMessage.scrollHeight;
+	  },
+	  componentDidMount: function() {
+	    this.scrollToBottom();
+	  },
+	  componentDidUpdate: function() {
+	    this.scrollToBottom();
+	  }
+	});
+	
+	var ChatClient = React.createClass({
+	  mixins: [ReactFireMixin],
+	  getInitialState: function() {
+	    return { messages: [] };
+	  },
+	  addMessage: function(newMessage) {
+	    this.firebaseRefs.messages.push(newMessage);
+	  },
+	  componentWillMount: function() {
+	  	var myFireBaseMessages = new Firebase('https://reactchatapp.firebaseio.com');
+
+	    this.bindAsArray(myFireBaseMessages.limitToLast(10), 'messages');
+	  },
+	  render: function() {
+	    return (
+	      <div>
+	        <Messages messages={this.state.messages} />
+	        <hr />
+	        <MessageInput onAddMessage={this.addMessage} />
+	      </div>
+	    );
+	  }
+	});
+	
+	var ChatApp = React.createClass({
+	  render: function() {
+	    return (
+	      <div>
+	        <h1>React Chat Application</h1>
+	        <hr />
+	        <h2>Chat Room</h2>
+	        <ChatClient/>
+	      </div>
+	    );
+	  }
+	});
+	
+	React.render(<ChatApp />, document.getElementById('reactChatApp'));
+  </script>
+
+</body>
+</html>
