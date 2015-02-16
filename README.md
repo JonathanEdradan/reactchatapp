@@ -1,7 +1,7 @@
 # reactchatapp
 
-4 Components:
-*CHatApp <br/>
-  *ChatClient
-    *Messages
+4 Components: <br/>
+*ChatApp <br/>
+  *ChatClient <br/>
+    *Messages <br/>
     *MessageInput
