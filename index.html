@@ -65,6 +65,7 @@
 	  }
 	});
 	// parent component to both messages and message input
+	// line 75 - fireBaseRefs is part of the ReactFireMixin on line 70
 	var ChatClient = React.createClass({
 	  mixins: [ReactFireMixin],
 	  getInitialState: function() {
@@ -101,8 +102,22 @@
 	    );
 	  }
 	});
-	
+	</script>
+	<div id="reactUsers"></div>
+	<script type="text/jsx">
+	// Users component which will represent all users using the chat app
+	var UsersComponent = React.createClass({
+		render: function() {
+			return (
+				<div className="usersComponent">
+					<h1>I am the usersComponent box</h1>
+				</div>
+			)
+		}
+	});
+
 	React.render(<ChatApp />, document.getElementById('reactChatApp'));
+	React.render(<UsersComponent/>, document.getElementById('reactUsers'));
   </script>
 
 </body>
