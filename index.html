@@ -14,7 +14,8 @@
 
 <div id="reactChatApp"></div>
   <script type="text/jsx">
-
+  // messageInput component - form where users provide data to be saved and displayed
+  // line 22 is the "enter button" if statement
 	var MessageInput = React.createClass({
 	  addMessage: function(e) {
 	    var messageNode = this.refs.message.getDOMNode();
@@ -42,7 +43,7 @@
 	    );
 	  }
 	});
-	
+	// messages component - how messages will be displayed 
 	var Messages = React.createClass({
 	  render: function() {
 	    var messageFromFireBase = this.props.messages.map(function(item, index) {
@@ -63,7 +64,7 @@
 	    this.scrollToBottom();
 	  }
 	});
-	
+	// parent component to both messages and message input
 	var ChatClient = React.createClass({
 	  mixins: [ReactFireMixin],
 	  getInitialState: function() {
@@ -87,7 +88,7 @@
 	    );
 	  }
 	});
-	
+	// parent component
 	var ChatApp = React.createClass({
 	  render: function() {
 	    return (
